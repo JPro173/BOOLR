@@ -342,6 +342,61 @@
             }
         });
     }
+
+    dialog.editBinaryToDecimal = function(component,callback) {
+        if(!component) return;
+        dialog.show();
+        dialog.name.innerHTML = "Edit BinToDec";
+        dialog.container.innerHTML += "<i class='material-icons' style='font-size: 60px'>memory<i>";
+        dialog.container.innerHTML += `<p>Select mode for component <i>${component.name}</i></p>`;
+
+        const modeSelect = createSelect(
+            component.properties, "mode", component.properties.mode || 4,
+            [{"value": 4, "text": "2 to 4"},
+             {"value": 8, "text": "3 to 8"},
+             {"value": 10, "text": "4 to 10"},
+             {"value": 16, "text": "4 to 16"}],
+            function() {
+		let mode = +this.value || 4;
+                component.properties.mode = mode;
+                component.height = mode;
+            }
+        );
+
+        setTimeout(() => modeSelect.focus(),10);
+
+        dialog.container.removeChild(dialog.container.children[dialog.container.children.length - 1]);
+
+        const errormsg = document.createElement("p");
+        errormsg.className = "errormsg";
+        errormsg.innerHTML = ".";
+        errormsg.hide = null;
+        errormsg.show = function(text) {
+            clearTimeout(this.hide);
+            this.innerHTML = text;
+            this.style.opacity = 1;
+            this.hide = setTimeout(() => this.style.opacity = 0, 2500);
+        }
+        dialog.container.appendChild(errormsg);
+
+        dialog.addOption("Cancel", function() {
+            if(!component.properties.mode) {
+                component.properties.mode = 4;
+                callback && callback();
+            }
+        });
+        dialog.addOption("OK",  function() {
+            if(modeSelect.valid(modeSelect.value)) {
+                modeSelect.apply();
+                callback && callback();
+            } else {
+                input.className = "error";
+                errormsg.show(modeSelect.errormsg);
+                this.onmouseup = () => this.onmouseup = dialog.hide;
+            }
+        });
+    }
+
     dialog.editRom = function(component,callback) {
         if(!component) return;
         dialog.show();
