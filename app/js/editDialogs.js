@@ -352,12 +352,13 @@
 
         const modeSelect = createSelect(
             component.properties, "mode", component.properties.mode || 4,
-            [{"value": 4, "text": "2 to 4"},
+            [{"value": 2, "text": "1 to 2"},
+             {"value": 4, "text": "2 to 4"},
              {"value": 8, "text": "3 to 8"},
              {"value": 10, "text": "4 to 10"},
              {"value": 16, "text": "4 to 16"}],
             function() {
-		let mode = +this.value || 4;
+		let mode = +this.value || 2;
                 component.properties.mode = mode;
                 component.height = mode;
             }
@@ -381,7 +382,7 @@
 
         dialog.addOption("Cancel", function() {
             if(!component.properties.mode) {
-                component.properties.mode = 4;
+                component.properties.mode = 2;
                 callback && callback();
             }
         });

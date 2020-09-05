@@ -2908,7 +2908,7 @@ class Display extends Component {
 
 class BinaryToDecimal extends Component {
     constructor(name,pos, properties) {
-        super(name,pos,2,4,{ type: "char", text: "B2D" });
+        super(name,pos,2,4,{ type: "char", text: "DEC" });
         this.properties = properties || {};
         this.value = 1;
 
@@ -2923,10 +2923,12 @@ class BinaryToDecimal extends Component {
 
     init() {
         this.output = [];
-        let inputs_count = 2;
+        let inputs_count = 1;
         const mode = this.properties.mode;
 
-        if (mode == 4) {
+        if (mode == 2) {
+            inputs_count = 1;
+        } else if (mode == 4) {
             inputs_count = 2;
         } else if (mode == 8) {
             inputs_count = 3;
