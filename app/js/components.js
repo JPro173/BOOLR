@@ -2906,27 +2906,55 @@ class Display extends Component {
 //     }
 // }
 
-// class BinaryToDecimal extends Component {
-//     constructor(name,pos) {
-//         super(name,pos,4,8,{ type: "value" });
-//         this.value = 0;
-//
-//         for(let i = 0; i < 8; ++i) {
-//             this.addInputPort({ side: 3, pos: i },Math.pow(2,i) + "");
-//         }
-//     }
-//
-//     function() {
-//         let value = 0;
-//         for(let i = 0; i < this.input.length; ++i) {
-//             if(this.input[i].value == 1) {
-//                 value = value + Math.pow(2,i);
-//             }
-//         }
-//
-//         this.value = value;
-//     }
-// }
+class BinaryToDecimal extends Component {
+    constructor(name,pos, properties) {
+        super(name,pos,2,4,{ type: "char", text: "2 ⭢ 4" });
+        this.properties = properties || {};
+        this.value = 1;
+
+        if(!this.properties.hasOwnProperty("mode")) {
+            setTimeout(() => {
+                dialog.editBinaryToDecimal(this, this.init.bind(this));
+            }, 100);
+        } else {
+            this.init();
+        }
+    }
+
+    init() {
+        this.output = [];
+        let inputs_count = 2;
+        const mode = this.properties.mode;
+
+        if (mode == 4) {
+            inputs_count = 2;
+        } else if (mode == 8) {
+            inputs_count = 3;
+        } else if (mode == 10) {
+            inputs_count = 4;
+        } else if (mode == 16) {
+            inputs_count = 4;
+        }
+
+        for(let i = 0; i < mode; ++i) {
+            this.addOutputPort({ side: 1, pos: i }, i + "");
+        }
+
+        for(let i = 0; i < inputs_count; ++i) {
+            this.addInputPort({ side: 3, pos: i }, Math.pow(2,i) + "");
+        }
+    }
+
+    function() {
+        let bin_str = this.input.map(x => x.value).reverse().join('');
+        let selected_idx = parseInt(bin_str, 2);
+
+        for(let i = 0; i < this.output.length; ++i) {
+            this.output[i].value = i == selected_idx ? 1 : 0;
+        }
+    }
+}
+
 //
 // class DecimalToBinary extends Component {
 //     constructor(name,pos) {
