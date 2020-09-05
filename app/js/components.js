@@ -2908,7 +2908,7 @@ class Display extends Component {
 
 class BinaryToDecimal extends Component {
     constructor(name,pos, properties) {
-        super(name,pos,2,4,{ type: "char", text: "2 ⭢ 4" });
+        super(name,pos,2,4,{ type: "char", text: "B2D" });
         this.properties = properties || {};
         this.value = 1;
 
