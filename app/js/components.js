@@ -3633,7 +3633,13 @@ class Wire {
             value = 1;
         }
 
+        for (let i = 0; i < this.input.length; ++i) {
+            const inp = this.input[i];
+            value = Math.max(value, inp.value);
+        }
+
         if(this.value == value && initial_value == value) return;
+        
         this.value = value;
 
         if (initial_value != value) {
@@ -3643,14 +3649,26 @@ class Wire {
         for(let i = 0; i < this.output.length; ++i) {
             const wire = this.output[i];
             if(wire != from) {
-                wire.update && updateQueue.push(wire.update.bind(wire,this.value,this));
+                if (wire.constructor.name == this.constructor.name) {
+                    if (wire.value != this.value) {
+                        wire.update(this.value, this);
+                    }
+                } else {
+                    wire.update && updateQueue.push(wire.update.bind(wire,this.value,this));
+                }
             }
         }
 
         for(let i = 0; i < this.input.length; ++i) {
             const wire = this.input[i];
-            if(wire != from) {
-                wire.update && updateQueue.push(wire.update.bind(wire,this.value,this));
+            if(wire != from && wire.value != this.value) {
+                if (wire.constructor.name == this.constructor.name) {
+                    if (wire.value != this.value) {
+                        wire.update(this.value, this);
+                    }
+                } else {
+                    wire.update && updateQueue.push(wire.update.bind(wire,this.value,this));
+                }
             }
         }
 
