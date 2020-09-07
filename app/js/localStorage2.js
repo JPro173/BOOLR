@@ -98,7 +98,7 @@ const constructors = {
     Button,Constant,Delay,Clock,Debug,
     Beep,Counter,LED,Display,
     Custom, TimerStart, TimerEnd,
-    ROM, BinaryToDecimal, LEDArray, SRLatch, DLatch
+    ROM, RAM, BinaryToDecimal, LEDArray, SRLatch, DLatch
 };
 
 /*
