@@ -3641,7 +3641,7 @@ class Wire {
 
         for (let i = 0; i < this.input.length; ++i) {
             const inp = this.input[i];
-            if (inp.value == 1) {
+            if (inp && inp.value == 1) {
                 if (inp.getNewValue) {
                     value = Math.max(value, inp.getNewValue());
                 } else {
@@ -3652,7 +3652,7 @@ class Wire {
 
         for (let i = 0; i < this.output.length; ++i) {
             const inp = this.output[i];
-            if (inp.value == 1) {
+            if (inp && inp.value == 1) {
                 if (inp.getNewValue) {
                     value = Math.max(value, inp.getNewValue());
                 } else {
@@ -3683,7 +3683,7 @@ class Wire {
 
         for(let i = 0; i < this.output.length; ++i) {
             const wire = this.output[i];
-            if(wire != from) {
+            if(wire && wire != from) {
                 if (wire.constructor.name == this.constructor.name) {
                     if (wire.value != this.value) {
                         wire.update(this.value, this);
@@ -3696,7 +3696,7 @@ class Wire {
 
         for(let i = 0; i < this.input.length; ++i) {
             const wire = this.input[i];
-            if(wire != from && wire.value != this.value) {
+            if(wire && wire != from && wire.value != this.value) {
                 if (wire.constructor.name == this.constructor.name) {
                     if (wire.value != this.value) {
                         wire.update(this.value, this);
