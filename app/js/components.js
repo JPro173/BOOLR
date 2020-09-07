@@ -3216,6 +3216,69 @@ class ROM extends Component {
     }
 }
 
+class RAM extends Component {
+    constructor(name, pos, peroperties) {
+        super(name, pos, 4, 8, { type: "char", text: "RAM" });
+
+        if(!this.properties.hasOwnProperty("data")) {
+            this.properties.data = [];
+        }
+
+        // inputs
+        this.RE = 0;
+        this.WE = 1;
+        this.ADDR = 10;
+        this.VALUE_IN = 2;
+
+        //outputs
+        this.VALUE_OUT = 0;
+        this.addInputPort({ side: 0, pos: 0  }, 'RE');
+        this.addInputPort({ side: 0, pos: 1  }, 'WE');
+
+        for(let i = 0; i < 8; ++i) {
+            this.addInputPort({ side: 3, pos: i }, 'Input ' +  i.toString());
+            this.addOutputPort({ side: 1, pos: i  }, 'Output ' + i.toString());
+        }
+
+        for(let i = 0; i < 2; ++i) {
+            this.addInputPort({ side: 0, pos: i + 2 }, 'Addr ' +  i.toString());
+        }
+
+        for(let i = 0; i < 4; ++i) {
+            this.addInputPort({ side: 2, pos: i }, 'Addr ' +  (i + 2).toString());
+        }
+    }
+
+    function() {
+        let addr_line = [];
+        let we = this.input[this.WE].value;
+        let re = this.input[this.RE].value;
+
+        if (we || re) {
+            for (let  i = this.ADDR; i < this.input.length; i++) {
+                addr_line.push(+this.input[i].value)
+            }
+            addr_line = parseInt(addr_line.reverse().join(''), 2);
+        }
+
+        if (we) {
+            for(let i = 0; i < 8; ++i) {
+                this.properties.data[addr_line * 8 + i] = this.input[this.VALUE_IN + i].value;
+            }
+        }
+
+        if (re) {
+            for(let i = 0; i < 8; ++i) {
+                this.output[this.VALUE_OUT + i].value = this.properties.data[addr_line * 8 + i];
+            }
+        } else {
+            for(let i = 0; i < 8; ++i) {
+                this.output[this.VALUE_OUT + i].value = 0;
+            }
+        }
+    }
+}
+
 class Custom extends Component {
     constructor(
         name,
