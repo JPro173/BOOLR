@@ -258,6 +258,7 @@
                 <div class="container">expand_less</div>
             </button>
             <button class="brbtn material-icons" id="pause" title="Pause simulation">pause</button>
+            <button class="brbtn material-icons" id="step" title="Step simulation">bug_report</button>
             <button class="brbtn" id="version" title="Version" onclick="dialog.update()" tooltip="Version">
                 <i class="material-icons">memory</i>
                 BOOLR
@@ -269,8 +270,26 @@
         </div>
         <script>
             document.querySelector("#pause").onclick = function() {
+                if (debug) {
+                    stepSimulation = true;
+                    notifications.push("Debug disabled");
+                }
                 pauseSimulation = !pauseSimulation;
+                debug = false;
                 this.innerHTML = pauseSimulation ? "play_arrow" : "pause";
+            }
+
+            document.querySelector("#step").onclick = function() {
+                if (debug) {
+                    stepSimulation = true;
+                } else {
+                    notifications.push("Debug enabled")
+                    notifications.push("Press > to step through the simulation<br/>Press play to stop debugger and continue execution");
+                }
+                pauseSimulation = true;
+                document.querySelector("#pause").innerHTML = "play_arrow";
+                debug = true;
+                this.innerHTML = debug ? "chevron_right" : "bug_report";
             }
 
             document.querySelector("#menuopen").onclick = function() {
