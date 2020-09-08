@@ -191,7 +191,7 @@ canvas {
     transition: transform .2s;
 }
 
-#pause {
+#pause, #step {
     right: 150px;
     padding: 4.5px;
 }

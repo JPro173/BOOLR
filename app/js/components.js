@@ -1594,8 +1594,10 @@ class Component {
         }
 
         for(let i = 0; i < wires.length; ++i) {
-            //wires[i].update(values[i]);
-            updateQueue.push(wires[i].update.bind(wires[i],values[i]));
+            // update wires immediately as they can't loop infinitely
+            // this will speed up debugging
+            wires[i].update(values[i]);
+            // updateQueue.push(wires[i].update.bind(wires[i],values[i]));
         }
     }
 
