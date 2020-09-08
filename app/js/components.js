@@ -1602,6 +1602,9 @@ class Component {
     }
 
     highlight(duration = 500) {
+        if (debug) {
+            duration = 500;
+        }
         this.outline = 1;
         setTimeout(() => this.outline = 0, duration)
     }
