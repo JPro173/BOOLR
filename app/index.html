@@ -271,11 +271,11 @@
         <script>
             document.querySelector("#pause").onclick = function() {
                 if (debug) {
-                    stepSimulation = true;
                     notifications.push("Debug disabled");
+                    document.querySelector("#step").innerHTML = "bug_report";
+                    debug = false;
                 }
                 pauseSimulation = !pauseSimulation;
-                debug = false;
                 this.innerHTML = pauseSimulation ? "play_arrow" : "pause";
             }
 
