@@ -1568,7 +1568,7 @@ class Component {
 
     update() {
         // Highlight
-        if(settings.showComponentUpdates) this.highlight(250);
+        if(settings.showComponentUpdates || debug) this.highlight(250);
 
         // Update output ports
         this.function();
@@ -2078,7 +2078,7 @@ class Delay extends Component {
 
     update() {
         // Highlight
-        if(settings.showComponentUpdates) this.highlight(250);
+        if(settings.showComponentUpdates || debug) this.highlight(250);
 
         this.lastUpdate = new Date;
 
@@ -3116,7 +3116,7 @@ class Display extends Component {
 //
 //     update() {
 //         // Highlight
-//         if(settings.showComponentUpdates) this.highlight(250);
+//         if(settings.showComponentUpdates || debug) this.highlight(250);
 //
 //         // Update output ports
 //         this.function();
@@ -3343,7 +3343,7 @@ class Custom extends Component {
 
     update() {
         // Highlight
-        if(settings.showComponentUpdates) this.highlight(250);
+        if(settings.showComponentUpdates || debug) this.highlight(250);
 
         this.function();
     }
@@ -3410,7 +3410,7 @@ class Custom extends Component {
                 output[i].port = port;
                 output[i].update = function() {
                     // Highlight
-                    if(settings.showComponentUpdates) this.highlight(250);
+                    if(settings.showComponentUpdates || debug) this.highlight(250);
 
                     this.function();
 
