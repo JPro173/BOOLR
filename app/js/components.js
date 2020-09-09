@@ -1367,6 +1367,9 @@ function cloneComponent(component, dx = 0, dy = 0) {
         clone.width = component.width;
 
         for(let i = 0; i < component.input.length; ++i) {
+            if (!clone.input[i]) {
+                continue;
+            }
             if (component.input[i]) {
                 clone.input[i].name = component.input[i].name;
                 clone.input[i].value = component.input[i].value;
@@ -1375,6 +1378,9 @@ function cloneComponent(component, dx = 0, dy = 0) {
         }
 
         for(let i = 0; i < component.output.length; ++i) {
+            if (!clone.output[i]) {
+                continue;
+            }
             if (component.output[i]) {
                 clone.output[i].name = component.output[i].name;
                 clone.output[i].value = component.output[i].value;
