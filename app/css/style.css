@@ -571,3 +571,29 @@ canvas {
 .close:active {
     transform: rotateZ(90deg) scale(.5);
 }
+
+.data-editor-table {
+    color: white;
+    text-align: center;
+    margin: 10px;
+    max-height: 300px;
+    height: 300px;
+    display: block;
+    overflow-y: scroll;
+}
+
+.data-editor-table {
+  margin: auto;
+  display: inline-block;
+}
+
+.data-editor-table td {
+    padding: 7px;
+    border: 1px solid #333;
+    margin: 0;
+    cursor: pointer;
+}
+
+.data-editor-table td:first-child {
+    border: 1px solid #222;
+}

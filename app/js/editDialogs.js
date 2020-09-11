@@ -40,6 +40,43 @@
         dialog.container.appendChild(document.createElement("br"));
         return input;
     }
+    
+    function createDataEditor(
+        component,
+        property,
+        value,
+        valid,
+        errormsg,
+        apply) {
+        const table = document.createElement("table");
+        table.className = "data-editor-table";
+        table.valid = valid;
+        table.errormsg = errormsg;
+        table.apply = apply;
+        table.value = value.slice();
+
+        const bits = 8;
+        for (let i = 0; i < 2 ** 6; i++) {
+            row = table.insertRow(i); 
+            cell = row.insertCell(0);
+            cell.innerHTML = i.toString();
+            for (let bit = 0; bit < bits; bit++) {
+                cell = row.insertCell(bit + 1);
+                cell.innerHTML = (value[i*bits + bit] || 0).toString();
+                cell.bit_row = i;
+                cell.bit = bit;
+                cell.onclick = function() {
+                    this.innerHTML = (1 - this.innerHTML).toString();
+                    table.value[this.bit_row * bits + this.bit] = +this.innerHTML;
+                }
+            }
+        }
+
+        dialog.container.appendChild(document.createTextNode(property.slice(0,1).toUpperCase() + property.slice(1) + ":"));
+        dialog.container.appendChild(table);
+        dialog.container.appendChild(document.createElement("br"));
+        return table;
+    }
 
     function createSelect(
         component,
@@ -165,8 +202,21 @@
             dialog.container.appendChild(document.createTextNode("ms"));
             dialog.container.appendChild(document.createElement("br"));
         }
+        if(component.properties.hasOwnProperty("data") && component.constructor.name == 'RAM') {
+            inputs.push(createDataEditor(
+                component.properties, "data", component.properties.data,
+                () => true,
+                "View/Edit data",
+                function() {
+                    component.properties.data = this.value;
+                    component.update();
+                }
+            ));
+            dialog.container.removeChild(dialog.container.children[dialog.container.children.length - 1]);
+            dialog.container.appendChild(document.createElement("br"));
+        }
 
-        if(component.properties.hasOwnProperty("data")) {
+        if(component.properties.hasOwnProperty("data") && component.constructor.name == 'ROM') {
             inputs.push(
                 createTextArea(
                     component.properties, "data", component.properties.data,
@@ -207,10 +257,14 @@
         dialog.addOption("OK",  function() {
             for(let i = 0; i < inputs.length; ++i) {
                 const input = inputs[i];
-                input.className = "";
+                // preserve initial className
+                if (!input.initialClassName) {
+                    input.initialClassName = input.className;
+                }
+                input.className = input.initialClassName;
 
                 if(!input.valid(input.value)) {
-                    input.className = "error";
+                    input.className += " error";
                     errormsg.show(input.errormsg);
 
                     this.onmouseup = () => this.onmouseup = dialog.hide;

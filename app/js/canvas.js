@@ -833,6 +833,10 @@ c.onmouseup = function(e) {
                 const wires = selecting.wires;
 
                 (function animate() {
+                    if (!selecting) {
+                      return;
+                    }
+
                     let dx = Math.round(selecting.x) - selecting.x;
                     let dy = Math.round(selecting.y) - selecting.y;
 
