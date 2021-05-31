@@ -19,6 +19,7 @@ clipboard.paste = function(x, y, undoable = false) {
         const dy = Math.round(y - this.selection.y) || 0;
 
         const clone = cloneSelection(this.components,this.wires,dx,dy);
+        this.fixNames(clone.components);
         addSelection(
             clone.components,
             clone.wires,
@@ -41,9 +42,39 @@ clipboard.paste = function(x, y, undoable = false) {
         // );
     } else if(this.components.length > 0) {
         const clone = cloneComponent(this.components[0])
+        this.fixNames([clone]);
         clone.pos.x = x;
         clone.pos.y = y;
         components.push(clone);
+    }
+}
+
+clipboard.fixNames = function (components) {
+    let categories = {}
+
+    // Find name categories (ex. D0, ADDR12, OUT23...)
+    for (const component of window.components) {
+        const match = component.name.match(/([\S\s]+?)([0-9]+)$/);
+        if (match) {
+            const category = match[1];
+            const number = parseInt(match[2]);
+            if (categories[category] !== undefined)
+                categories[category] = Math.max(number, categories[category]);
+            else
+                categories[category] = number;
+        }
+    }
+    // Update components name with incremental number from category
+    for (let component of components) {
+        const match = component.name.match(/([\S\s]+?)([0-9]+)$/);
+        if (match) {
+            const category = match[1];
+            const number = parseInt(match[2]);
+            if (categories[category] !== undefined) {
+                categories[category] += 1;
+                component.name = category + categories[category];
+            }
+        }
     }
 }
 
